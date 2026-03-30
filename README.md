@@ -13,8 +13,8 @@ A smart pet care planning assistant built with Python and Streamlit.
 
 ## 📸 Demo
 
-<a href="https://raw.githubusercontent.com/aravsingh80/ai110-module2show-pawpal-starter/main/course_images/pawpal_screenshot.png" target="_blank">
-  <img src='https://github.com/aravsingh80/ai110-module2show-pawpal-starter/tree/main/course_images' title='PawPal App' width='' alt='PawPal App' class='center-block' />
+<a href="https://github.com/aravsingh80/ai110-module2show-pawpal-starter/tree/main/course_images" target="_blank">
+  <img src='https://raw.githubusercontent.com/aravsingh80/ai110-module2show-pawpal-starter/main/course_images/pawpal_screenshot.png' title='PawPal App' width='' alt='PawPal App' class='center-block' />
 </a>
 
 ## Scenario
