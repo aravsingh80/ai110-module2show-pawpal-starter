@@ -166,7 +166,17 @@ class Scheduler:
     # ------------------------------------------------------------------
 
     def mark_task_complete(self, task: Task) -> None:
-        """Complete a task and, if recurring, add the next occurrence to the pet."""
+        """Complete a task and automatically schedule its next occurrence if recurring.
+
+        Delegates to Task.mark_complete(), which sets is_completed=True and
+        returns a new Task shifted by one day (frequency="daily") or one week
+        (frequency="weekly"). If a next occurrence is produced it is added
+        directly to the pet's task list so future schedule runs can include it.
+
+        Args:
+            task: The Task to mark as done. Must already belong to this
+                  scheduler's pet.
+        """
         next_task = task.mark_complete()
         if next_task is not None:
             self.pet.add_task(next_task)
@@ -178,9 +188,20 @@ class Scheduler:
     def detect_conflicts(self, tasks: List[Task]) -> List[str]:
         """Return warning strings for any two tasks whose time windows overlap.
 
-        A conflict exists when a task's [start, start+duration) interval
-        overlaps with another task's interval. Tasks without a start_time
-        are skipped since they have no fixed window.
+        Uses the standard interval-overlap test:
+            A overlaps B  iff  A.start < B.end  and  B.start < A.end
+
+        Only tasks with a non-empty start_time ("HH:MM") are compared;
+        untimed tasks are ignored because they have no fixed window.
+        All times are converted to minutes-since-midnight for arithmetic.
+
+        Args:
+            tasks: The list of Task objects to check. Typically
+                   pet.assigned_tasks or scheduler.scheduled_tasks.
+
+        Returns:
+            A list of human-readable warning strings, one per conflicting
+            pair. An empty list means no conflicts were found.
         """
         timed = [t for t in tasks if t.start_time]
         warnings: List[str] = []
