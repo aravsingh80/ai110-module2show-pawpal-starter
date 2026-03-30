@@ -34,6 +34,12 @@ My initial UML design included four main classes: Owner, Pet, Task, and Schedule
 - Describe one tradeoff your scheduler makes.
 - Why is that tradeoff reasonable for this scenario?
 
+**Greedy priority-first scheduling ignores start times when fitting tasks into the day.**
+
+The `generate_schedule` method sorts tasks by priority score and greedily adds each one until the time budget runs out. It does not consider `start_time` at all as a high-priority "Evening walk" could be scheduled before a low-priority "Morning medication" purely because of its priority rank, even if those times conflict in the real world.
+
+This is a reasonable tradeoff for an MVP because most pet owners think first about *what must get done* rather than *exactly when*. Enforcing strict time ordering would require either rejecting tasks that don't fit their slot (surprising behavior) or doing full constraint-satisfaction search (far more complex). The separate `detect_conflicts` method handles the time-overlap problem explicitly, so the user gets a warning rather than the scheduler silently producing an impossible plan. The two concerns, "what to include" and "do any times clash", are kept intentionally separate for clarity.
+
 ---
 
 ## 3. AI Collaboration
